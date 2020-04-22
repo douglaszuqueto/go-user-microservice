@@ -6,7 +6,7 @@
 * Client
 * Gateway
 
-## Requisítos
+## Requisitos
 
 * [Go](https://golang.org/dl/)
 * [Protobuf](https://github.com/protocolbuffers/protobuf)
