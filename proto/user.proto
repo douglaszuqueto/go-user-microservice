@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "proto";
+
+service UserService {
+        rpc List(ListUserRequest) returns (ListUserResponse){
+			option (google.api.http) = {
+				get: "/v1/user"
+			};
+		};
+		rpc Get(GetUserRequest) returns (GetUserResponse){
+			option (google.api.http) = {
+				get: "/v1/user/{id}"
+			};
+		};
+		rpc Create(CreateUserRequest) returns (CreateUserResponse){
+			option (google.api.http) = {
+				post: "/v1/user"
+				body: "*"
+			};
+		};
+		rpc Update(UpdateUserRequest) returns (UpdateUserResponse){
+			option (google.api.http) = {
+				put: "/v1/user/{user.id}"
+				body: "*"
+			};
+		};
+		rpc Delete(DeleteUserRequest) returns (DeleteUserResponse){
+			option (google.api.http) = {
+				delete: "/v1/user/{id}"
+			};
+		};
+}
+
+message User {
+		string id = 1;
+		string username = 2;
+		string email = 3;
+		uint32 state = 4;
+        google.protobuf.Timestamp created_at = 5;
+		google.protobuf.Timestamp updated_at = 6;
+}
+
+message ListUserRequest {}
+
+message ListUserResponse {
+		repeated User user = 1;
+}
+
+message GetUserRequest {
+		string id = 1;
+}
+
+message GetUserResponse {
+		User user = 1;
+}
+
+message CreateUserRequest {
+		User user = 1;
+}
+
+message CreateUserResponse {
+		string result = 1;
+}
+
+message UpdateUserRequest {
+		User user = 1;
+}
+
+message UpdateUserResponse {
+		string result = 1;
+}
+
+message DeleteUserRequest {
+		string id = 1;
+}
+
+message DeleteUserResponse {
+		string result = 1;
+}
