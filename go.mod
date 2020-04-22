@@ -1,4 +1,4 @@
-module github.com/douglaszuqueto/golang-grpc
+module github.com/douglaszuqueto/go-grpc-user
 
 go 1.14
 

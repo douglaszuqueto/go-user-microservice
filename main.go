@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/douglaszuqueto/golang-grpc/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
 )
 
 func main() {

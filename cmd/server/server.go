@@ -8,9 +8,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/douglaszuqueto/golang-grpc/pkg/grpc/api"
-	"github.com/douglaszuqueto/golang-grpc/pkg/grpc/server"
-	"github.com/douglaszuqueto/golang-grpc/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
 )
 
 func main() {

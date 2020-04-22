@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/douglaszuqueto/golang-grpc/proto"
+	"github.com/douglaszuqueto/go-grpc-user/proto"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/douglaszuqueto/golang-grpc/pkg/storage"
-	"github.com/douglaszuqueto/golang-grpc/proto"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/proto"
 	"github.com/golang/protobuf/ptypes"
 
 	"google.golang.org/grpc"

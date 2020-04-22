@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/douglaszuqueto/golang-grpc/proto"
+	"github.com/douglaszuqueto/go-grpc-user/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
