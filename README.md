@@ -6,6 +6,13 @@
 * Client
 * Gateway
 
+## Requisítos
+
+* [Go](https://golang.org/dl/)
+* [Protobuf](https://github.com/protocolbuffers/protobuf)
+* [gRPC-Go](https://github.com/grpc/grpc-go)
+* [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway)
+
 ## API
 
 ### All
