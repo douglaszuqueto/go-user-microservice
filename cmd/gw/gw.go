@@ -4,6 +4,9 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/proto"
@@ -15,6 +18,18 @@ import (
 )
 
 func main() {
+	signalCh := make(chan os.Signal, 1)
+	doneCh := make(chan bool, 1)
+
+	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
+
+	go func() {
+		sig := <-signalCh
+		log.Println("Signal stop:", sig)
+
+		doneCh <- true
+	}()
+
 	creds, err := credentials.NewClientTLSFromFile("./certs/server.crt", "")
 	if err != nil {
 		log.Fatalln("could not load tls cert:", err)
@@ -35,14 +50,19 @@ func main() {
 
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
 
 	err = proto.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "localhost:8001", opts)
 	if err != nil {
 		panic(err)
 	}
 
-	if err := http.ListenAndServe(":8081", mux); err != nil {
-		panic(err)
-	}
+	go func() {
+		if err := http.ListenAndServe(":8081", mux); err != nil {
+			panic(err)
+		}
+	}()
+
+	<-doneCh
+	cancel()
+	log.Println("Finalizando...")
 }
