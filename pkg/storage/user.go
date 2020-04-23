@@ -7,7 +7,6 @@ import (
 )
 
 var db = sync.Map{}
-var rw = sync.Mutex{}
 
 // User User
 type User struct {
@@ -21,9 +20,6 @@ type User struct {
 
 // ListUser ListUser
 func ListUser() ([]User, error) {
-	rw.Lock()
-	defer rw.Unlock()
-
 	var l []User
 	db.Range(func(key interface{}, value interface{}) bool {
 		u, ok := value.(User)
@@ -39,9 +35,6 @@ func ListUser() ([]User, error) {
 
 // GetUser GetUser
 func GetUser(id string) (User, error) {
-	rw.Lock()
-	defer rw.Unlock()
-
 	var l User
 
 	value, ok := db.Load(id)
@@ -56,9 +49,6 @@ func GetUser(id string) (User, error) {
 
 // CreateUser CreateUser
 func CreateUser(u User) error {
-	rw.Lock()
-	defer rw.Unlock()
-
 	db.Store(u.ID, u)
 
 	return nil
@@ -66,9 +56,6 @@ func CreateUser(u User) error {
 
 // UpdateUser UpdateUser
 func UpdateUser(u User) error {
-	rw.Lock()
-	defer rw.Unlock()
-
 	db.Store(u.ID, u)
 
 	return nil
@@ -76,9 +63,6 @@ func UpdateUser(u User) error {
 
 // DeleteUser DeleteUser
 func DeleteUser(id string) error {
-	rw.Lock()
-	defer rw.Unlock()
-
 	db.Delete(id)
 
 	return nil
