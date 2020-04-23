@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -51,13 +52,23 @@ func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 
-	err = proto.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "localhost:8001", opts)
+	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
+	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
+
+	grpcURI := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
+
+	err = proto.RegisterUserServiceHandlerFromEndpoint(ctx, mux, grpcURI, opts)
 	if err != nil {
 		panic(err)
 	}
 
+	grpcGatewayHost := os.Getenv("GRPC_GW_HOST")
+	grpcGatewayPort := os.Getenv("GRPC_GW_PORT")
+
+	grpcGatewayURI := fmt.Sprintf("%s:%s", grpcGatewayHost, grpcGatewayPort)
+
 	go func() {
-		if err := http.ListenAndServe(":8081", mux); err != nil {
+		if err := http.ListenAndServe(grpcGatewayURI, mux); err != nil {
 			panic(err)
 		}
 	}()

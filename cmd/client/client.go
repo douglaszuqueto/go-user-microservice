@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/proto"
@@ -20,7 +21,10 @@ var keep = keepalive.ClientParameters{
 func main() {
 	fmt.Printf("\nGolang GRPC - Client\n\n")
 
-	address := "localhost:8001"
+	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
+	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
+
+	uri := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	opts := grpc.WaitForReady(false)
 
@@ -30,7 +34,7 @@ func main() {
 	}
 
 	conn, err := grpc.Dial(
-		address,
+		uri,
 		// grpc.WithInsecure(),
 		grpc.WithTransportCredentials(creds),
 		grpc.WithKeepaliveParams(keep),

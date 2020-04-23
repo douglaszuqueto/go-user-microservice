@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -26,10 +27,14 @@ func main() {
 		doneCh <- true
 	}()
 
-	port := ":8001"
-	rpcServer := server.NewServer(port)
+	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
+	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
+
+	uri := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
+
+	rpcServer := server.NewServer(uri)
 	if rpcServer == nil {
-		log.Println("Nao consigo escutar na porta:", port)
+		log.Println("Nao consigo escutar na porta:", uri)
 	}
 
 	api.NewUserService(rpcServer.Grpc)
