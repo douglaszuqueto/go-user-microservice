@@ -62,3 +62,13 @@ curl --request PUT \
 curl --request DELETE \
   --url http://127.0.0.1:8081/v1/user/1
 ```
+
+## Geração de certificados de segurança
+
+```bash
+openssl genrsa -out server.key
+openssl req -new -sha256 -key server.key -out server.csr
+openssl x509 -req -days 3650 -in server.csr -out server.crt -signkey server.key
+```
+
+## Referências

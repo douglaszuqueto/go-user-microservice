@@ -30,3 +30,10 @@ update:
 pb:
 	@protoc -I ${APIS_PATH} -I proto/ proto/*.proto --go_out=plugins=grpc:proto
 	@protoc -I ${APIS_PATH} -I proto/ proto/*.proto --grpc-gateway_out=logtostderr=true:./proto
+
+docker-build:
+	./docker.sh server
+	./docker.sh gw
+
+docker-compose:
+	docker-compose up
