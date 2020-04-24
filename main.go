@@ -6,7 +6,10 @@ import (
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 )
+
+var db storage.UserStorage
 
 func main() {
 	user := storage.User{
@@ -16,6 +19,8 @@ func main() {
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
+
+	db = util.GetStorageType()
 
 	fmt.Println("==> LIST <==")
 	listUser()
@@ -45,7 +50,7 @@ func main() {
 }
 
 func listUser() {
-	users, err := storage.ListUser()
+	users, err := db.ListUser()
 	if err != nil {
 		log.Fatalln("UserList", err)
 	}
@@ -54,7 +59,7 @@ func listUser() {
 }
 
 func getUser(id string) {
-	user, err := storage.GetUser(id)
+	user, err := db.GetUser(id)
 	if err != nil {
 		log.Fatalln("UserGet", err)
 	}
@@ -63,21 +68,21 @@ func getUser(id string) {
 }
 
 func createUser(u storage.User) {
-	err := storage.CreateUser(u)
+	err := db.CreateUser(u)
 	if err != nil {
 		log.Fatalln("UserCreate", err)
 	}
 }
 
 func updateUser(u storage.User) {
-	err := storage.UpdateUser(u)
+	err := db.UpdateUser(u)
 	if err != nil {
 		log.Fatalln("UserUpdate", err)
 	}
 }
 
 func deleteUser(id string) {
-	err := storage.DeleteUser(id)
+	err := db.DeleteUser(id)
 	if err != nil {
 		log.Fatalln("UserDelete", err)
 	}

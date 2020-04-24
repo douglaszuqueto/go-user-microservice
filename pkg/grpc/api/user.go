@@ -13,11 +13,15 @@ import (
 )
 
 // UserService UserService
-type UserService struct{}
+type UserService struct {
+	storage storage.UserStorage
+}
 
 // NewUserService NewUserService
-func NewUserService(s *grpc.Server) *UserService {
-	server := &UserService{}
+func NewUserService(s *grpc.Server, storage storage.UserStorage) *UserService {
+	server := &UserService{
+		storage: storage,
+	}
 
 	if s != nil {
 		proto.RegisterUserServiceServer(s, server)
@@ -27,8 +31,8 @@ func NewUserService(s *grpc.Server) *UserService {
 }
 
 // Get Get
-func (s UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*proto.GetUserResponse, error) {
-	user, err := storage.GetUser(req.Id)
+func (s *UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*proto.GetUserResponse, error) {
+	user, err := s.storage.GetUser(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -43,10 +47,10 @@ func (s UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*proto
 }
 
 // List List
-func (s UserService) List(ctx context.Context, req *proto.ListUserRequest) (*proto.ListUserResponse, error) {
+func (s *UserService) List(ctx context.Context, req *proto.ListUserRequest) (*proto.ListUserResponse, error) {
 	l := []*proto.User{}
 
-	users, err := storage.ListUser()
+	users, err := s.storage.ListUser()
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +69,8 @@ func (s UserService) List(ctx context.Context, req *proto.ListUserRequest) (*pro
 }
 
 // Create Create
-func (s UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (*proto.CreateUserResponse, error) {
-	if _, err := storage.GetUser(req.User.Id); err == nil {
+func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (*proto.CreateUserResponse, error) {
+	if _, err := s.storage.GetUser(req.User.Id); err == nil {
 		return nil, errors.New("user already exists")
 	}
 
@@ -79,7 +83,7 @@ func (s UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (
 		UpdatedAt: time.Now(),
 	}
 
-	if err := storage.CreateUser(user); err != nil {
+	if err := s.storage.CreateUser(user); err != nil {
 		return nil, err
 	}
 
@@ -91,8 +95,8 @@ func (s UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (
 }
 
 // Update Update
-func (s UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) (*proto.UpdateUserResponse, error) {
-	userOld, err := storage.GetUser(req.User.Id)
+func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) (*proto.UpdateUserResponse, error) {
+	userOld, err := s.storage.GetUser(req.User.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +110,7 @@ func (s UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) (
 		UpdatedAt: time.Now(),
 	}
 
-	if err := storage.UpdateUser(user); err != nil {
+	if err := s.storage.UpdateUser(user); err != nil {
 		return nil, err
 	}
 
@@ -118,12 +122,12 @@ func (s UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) (
 }
 
 // Delete Delete
-func (s UserService) Delete(ctx context.Context, req *proto.DeleteUserRequest) (*proto.DeleteUserResponse, error) {
-	if _, err := storage.GetUser(req.Id); err != nil {
+func (s *UserService) Delete(ctx context.Context, req *proto.DeleteUserRequest) (*proto.DeleteUserResponse, error) {
+	if _, err := s.storage.GetUser(req.Id); err != nil {
 		return nil, err
 	}
 
-	if err := storage.DeleteUser(req.Id); err != nil {
+	if err := s.storage.DeleteUser(req.Id); err != nil {
 		return nil, err
 	}
 

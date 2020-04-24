@@ -12,6 +12,9 @@ import (
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -27,17 +30,16 @@ func main() {
 		doneCh <- true
 	}()
 
+	var db storage.UserStorage = util.GetStorageType()
+
 	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
 	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
 
 	uri := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	rpcServer := server.NewServer(uri)
-	if rpcServer == nil {
-		log.Println("Nao consigo escutar na porta:", uri)
-	}
 
-	api.NewUserService(rpcServer.Grpc)
+	api.NewUserService(rpcServer.Grpc, db)
 
 	go func() {
 		err := rpcServer.Start()
@@ -60,7 +62,7 @@ func main() {
 			UpdatedAt: time.Now().Add(time.Hour),
 		}
 
-		err := storage.CreateUser(user)
+		err := db.CreateUser(user)
 		if err != nil {
 			log.Println("CreateUser err", err)
 		}
