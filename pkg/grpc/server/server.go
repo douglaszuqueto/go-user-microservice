@@ -4,11 +4,13 @@ import (
 	"context"
 	"log"
 	"net"
+	"os"
 	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
+	"google.golang.org/grpc/metadata"
 )
 
 // GRPCServer GRPCServer
@@ -47,11 +49,41 @@ func unaryInterceptor(ctx context.Context,
 	return h, err
 }
 
+func jwtUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	meta, _ := metadata.FromIncomingContext(ctx)
+
+	// tokenHeader := meta.Get("authorization")
+	_ = meta.Get("authorization")
+
+	h, err := handler(ctx, req)
+
+	return h, err
+}
+
+func grpcMiddlewares() []grpc.UnaryServerInterceptor {
+	unary := []grpc.UnaryServerInterceptor{
+		unaryInterceptor,
+	}
+
+	if useJWT := os.Getenv("APP_JWT"); useJWT == "1" {
+		log.Println("Middleware: JWT")
+
+		jwtSecret := os.Getenv("APP_JWT_SECRET")
+		if len(jwtSecret) == 0 {
+			log.Fatalln("Invalid jwt secret", jwtSecret)
+		}
+
+		unary = append(unary, jwtUnaryInterceptor)
+	}
+
+	return unary
+}
+
 // NewServer NewServer
 func NewServer(port string) *GRPCServer {
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		return nil
+		log.Fatalln(err)
 	}
 
 	creds, err := credentials.NewServerTLSFromFile("./certs/server.crt", "./certs/server.key")
@@ -63,7 +95,7 @@ func NewServer(port string) *GRPCServer {
 		listener: listener,
 		Grpc: grpc.NewServer(
 			grpc.Creds(creds),
-			grpc.UnaryInterceptor(unaryInterceptor),
+			grpc.ChainUnaryInterceptor(grpcMiddlewares()...),
 			grpc.KeepaliveEnforcementPolicy(kaep),
 			grpc.KeepaliveParams(keep),
 		),
@@ -78,4 +110,5 @@ func (r *GRPCServer) Start() error {
 // Stop Stop
 func (r *GRPCServer) Stop() {
 	r.Grpc.GracefulStop()
+	r.listener.Close()
 }
