@@ -56,7 +56,6 @@ func main() {
 		user := storage.User{
 			ID:        idString,
 			Username:  "username_" + idString,
-			Email:     "username_" + idString + "@mail.com",
 			State:     1,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now().Add(time.Hour),

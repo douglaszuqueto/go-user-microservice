@@ -77,7 +77,6 @@ func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) 
 	user := storage.User{
 		ID:        req.User.Id,
 		Username:  req.User.Username,
-		Email:     req.User.Email,
 		State:     req.User.State,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -104,7 +103,6 @@ func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) 
 	user := storage.User{
 		ID:        req.User.Id,
 		Username:  req.User.Username,
-		Email:     req.User.Email,
 		State:     req.User.State,
 		CreatedAt: userOld.CreatedAt,
 		UpdatedAt: time.Now(),
@@ -142,7 +140,6 @@ func userToProtoStruct(u storage.User) (proto.User, error) {
 	user := proto.User{
 		Id:       u.ID,
 		Username: u.Username,
-		Email:    u.Email,
 		State:    u.State,
 	}
 

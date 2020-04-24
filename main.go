@@ -15,7 +15,6 @@ func main() {
 	user := storage.User{
 		ID:        "1",
 		Username:  "admin",
-		Email:     "admin@mail.com",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

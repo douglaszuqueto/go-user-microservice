@@ -35,7 +35,6 @@ func main() {
 	user := &proto.User{
 		Id:       "11",
 		Username: "username_11",
-		Email:    "username_11@mail.com",
 		State:    1,
 	}
 
