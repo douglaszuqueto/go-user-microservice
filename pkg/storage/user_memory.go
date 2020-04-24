@@ -4,6 +4,8 @@ import (
 	"errors"
 	"log"
 	"sync"
+
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 )
 
 // UserMemoryStorage UserMemoryStorage
@@ -51,6 +53,8 @@ func (s *UserMemoryStorage) GetUser(id string) (User, error) {
 
 // CreateUser CreateUser
 func (s *UserMemoryStorage) CreateUser(u User) error {
+	u.ID = util.GenerateID()
+
 	s.db.Store(u.ID, u)
 
 	return nil

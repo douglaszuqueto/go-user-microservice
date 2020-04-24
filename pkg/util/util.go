@@ -1,25 +1,12 @@
 package util
 
 import (
-	"os"
-
-	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/google/uuid"
 )
 
-// GetStorageType GetStorageType
-func GetStorageType() storage.UserStorage {
-	storageType := os.Getenv("APP_STORAGE")
+// GenerateID GenerateID
+func GenerateID() string {
+	id := uuid.New()
 
-	var db storage.UserStorage
-
-	switch storageType {
-	case "memory":
-		db = storage.NewUserMemoryStorage()
-	case "postgres":
-		db = storage.NewUserPostgresStorage()
-	default:
-		panic("unknow storage type: " + storageType)
-	}
-
-	return db
+	return id.String()
 }

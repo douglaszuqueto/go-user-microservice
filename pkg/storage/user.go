@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"os"
 	"time"
 )
 
@@ -20,4 +21,22 @@ type User struct {
 	State     uint32
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+// GetStorageType GetStorageType
+func GetStorageType() UserStorage {
+	storageType := os.Getenv("APP_STORAGE")
+
+	var db UserStorage
+
+	switch storageType {
+	case "memory":
+		db = NewUserMemoryStorage()
+	case "postgres":
+		db = NewUserPostgresStorage()
+	default:
+		panic("unknow storage type: " + storageType)
+	}
+
+	return db
 }

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 )
 
 var db storage.UserStorage
@@ -19,7 +18,7 @@ func main() {
 		UpdatedAt: time.Now(),
 	}
 
-	db = util.GetStorageType()
+	db = storage.GetStorageType()
 
 	fmt.Println("==> LIST <==")
 	listUser()

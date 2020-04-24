@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
@@ -70,12 +69,7 @@ func (s *UserService) List(ctx context.Context, req *proto.ListUserRequest) (*pr
 
 // Create Create
 func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (*proto.CreateUserResponse, error) {
-	if _, err := s.storage.GetUser(req.User.Id); err == nil {
-		return nil, errors.New("user already exists")
-	}
-
 	user := storage.User{
-		ID:        req.User.Id,
 		Username:  req.User.Username,
 		State:     req.User.State,
 		CreatedAt: time.Now(),

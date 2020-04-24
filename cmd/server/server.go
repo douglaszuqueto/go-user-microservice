@@ -12,7 +12,6 @@ import (
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 
 	_ "github.com/lib/pq"
 )
@@ -30,7 +29,7 @@ func main() {
 		doneCh <- true
 	}()
 
-	var db storage.UserStorage = util.GetStorageType()
+	var db storage.UserStorage = storage.GetStorageType()
 
 	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
 	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
@@ -54,7 +53,6 @@ func main() {
 		log.Println("Inserindo user:", idString)
 
 		user := storage.User{
-			ID:        idString,
 			Username:  "username_" + idString,
 			State:     1,
 			CreatedAt: time.Now(),

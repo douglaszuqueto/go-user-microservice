@@ -30,10 +30,9 @@ func main() {
 	listUser()
 
 	fmt.Printf("\n==> GET <==\n\n")
-	getUser("1")
+	getUser("d588d052-813c-433c-aa1b-46b44213b455")
 
 	user := &proto.User{
-		Id:       "11",
 		Username: "username_11",
 		State:    1,
 	}
@@ -45,6 +44,7 @@ func main() {
 	fmt.Printf("\n==> UPDATE <==\n\n")
 
 	user.State = 2
+	user.Id = "d588d052-813c-433c-aa1b-46b44213b455"
 
 	updateUser(user)
 	getUser(user.Id)
