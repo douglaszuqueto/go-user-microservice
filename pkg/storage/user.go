@@ -9,7 +9,7 @@ import (
 type UserStorage interface {
 	ListUser() ([]User, error)
 	GetUser(id string) (User, error)
-	CreateUser(u User) error
+	CreateUser(u User) (string, error)
 	UpdateUser(u User) error
 	DeleteUser(id string) error
 }

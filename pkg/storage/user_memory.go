@@ -52,12 +52,12 @@ func (s *UserMemoryStorage) GetUser(id string) (User, error) {
 }
 
 // CreateUser CreateUser
-func (s *UserMemoryStorage) CreateUser(u User) error {
+func (s *UserMemoryStorage) CreateUser(u User) (string, error) {
 	u.ID = util.GenerateID()
 
 	s.db.Store(u.ID, u)
 
-	return nil
+	return u.ID, nil
 }
 
 // UpdateUser UpdateUser

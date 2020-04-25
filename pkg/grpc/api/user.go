@@ -76,12 +76,14 @@ func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) 
 		UpdatedAt: time.Now(),
 	}
 
-	if err := s.storage.CreateUser(user); err != nil {
+	id, err := s.storage.CreateUser(user)
+
+	if err != nil {
 		return nil, err
 	}
 
 	resp := &proto.CreateUserResponse{
-		Result: "ok",
+		Id: id,
 	}
 
 	return resp, nil

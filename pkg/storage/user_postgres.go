@@ -98,7 +98,7 @@ func (s *UserPostgresStorage) GetUser(id string) (User, error) {
 }
 
 // CreateUser CreateUser
-func (s *UserPostgresStorage) CreateUser(u User) error {
+func (s *UserPostgresStorage) CreateUser(u User) (string, error) {
 	query := `
 		INSERT INTO public.user 
 			(username, state) 
@@ -106,8 +106,8 @@ func (s *UserPostgresStorage) CreateUser(u User) error {
 			($1, $2)
 		RETURNING id`
 
-	_, err := doInsert(s.db, query, u.Username, u.State)
-	return err
+	id, err := doInsert(s.db, query, u.Username, u.State)
+	return id, err
 }
 
 // UpdateUser UpdateUser

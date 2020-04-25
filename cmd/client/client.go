@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 	"github.com/douglaszuqueto/go-grpc-user/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -38,18 +39,18 @@ func main() {
 	getUser("d588d052-813c-433c-aa1b-46b44213b455")
 
 	user := &proto.User{
-		Username: "username_11",
+		Username: "username_" + util.GenerateID(),
 		State:    1,
 	}
 
 	fmt.Printf("\n==> CREATE <==\n\n")
 
-	createUser(user)
+	id, _ := createUser(user)
 
 	fmt.Printf("\n==> UPDATE <==\n\n")
 
 	user.State = 2
-	user.Id = "d588d052-813c-433c-aa1b-46b44213b455"
+	user.Id = id
 
 	updateUser(user)
 	getUser(user.Id)
@@ -117,7 +118,7 @@ func getUser(id string) {
 	fmt.Printf("ID: %v \t| username: %v  \t| state: %v\n", user.User.Id, user.User.Username, user.User.State)
 }
 
-func createUser(user *proto.User) {
+func createUser(user *proto.User) (string, error) {
 	req := &proto.CreateUserRequest{
 		User: user,
 	}
@@ -125,10 +126,12 @@ func createUser(user *proto.User) {
 	res, err := userService.Create(context.Background(), req)
 	if err != nil {
 		fmt.Println("userService.Create", err)
-		return
+		return "", err
 	}
 
-	fmt.Println("userService.Create:", res.Result)
+	fmt.Println("userService.Create:", res.Id)
+
+	return res.Id, nil
 }
 
 func updateUser(user *proto.User) {

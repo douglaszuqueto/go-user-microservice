@@ -64,7 +64,7 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
-		string result = 1;
+		string id = 1;
 }
 
 message UpdateUserRequest {

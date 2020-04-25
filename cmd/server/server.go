@@ -62,7 +62,7 @@ func main() {
 				UpdatedAt: time.Now().Add(time.Hour),
 			}
 
-			err := db.CreateUser(user)
+			_, err := db.CreateUser(user)
 			if err != nil {
 				log.Println("CreateUser err", err)
 			}
