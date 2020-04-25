@@ -34,9 +34,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
 	"user": {
-		"id": "1",
 		"username": "admin",
-		"email": "admin@mail.com",
 		"state": 2
 	}
 }'
@@ -51,7 +49,6 @@ curl --request PUT \
 	"user": {
 		"id": "1",
 		"username": "admin",
-		"email": "admin@mail.com",
 		"state": 5
 	}
 }'
@@ -70,6 +67,9 @@ openssl genrsa -out server.key
 openssl req -new -sha256 -key server.key -out server.csr
 openssl x509 -req -days 3650 -in server.csr -out server.crt -signkey server.key
 ```
+## Todo
+
+* Colocar password
 
 ## Changelog
 
