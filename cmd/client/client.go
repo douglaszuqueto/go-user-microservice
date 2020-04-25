@@ -12,6 +12,11 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
+var (
+	grpcServerHost = os.Getenv("GRPC_SERVER_HOST")
+	grpcServerPort = os.Getenv("GRPC_SERVER_PORT")
+)
+
 var keep = keepalive.ClientParameters{
 	Time:                10 * time.Second, // send pings every 10 seconds if there is no activity
 	Timeout:             time.Second,      // wait 1 second for ping ack before considering the connection dead
@@ -58,9 +63,6 @@ func main() {
 }
 
 func connect() *grpc.ClientConn {
-	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
-	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
-
 	uri := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	opts := grpc.WaitForReady(false)

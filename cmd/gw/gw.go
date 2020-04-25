@@ -18,6 +18,14 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
+var (
+	grpcServerHost = os.Getenv("GRPC_SERVER_HOST")
+	grpcServerPort = os.Getenv("GRPC_SERVER_PORT")
+
+	grpcGatewayHost = os.Getenv("GRPC_GW_HOST")
+	grpcGatewayPort = os.Getenv("GRPC_GW_PORT")
+)
+
 func main() {
 	signalCh := make(chan os.Signal, 1)
 	doneCh := make(chan bool, 1)
@@ -52,18 +60,12 @@ func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 
-	grpcServerHost := os.Getenv("GRPC_SERVER_HOST")
-	grpcServerPort := os.Getenv("GRPC_SERVER_PORT")
-
 	grpcURI := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	err = proto.RegisterUserServiceHandlerFromEndpoint(ctx, mux, grpcURI, opts)
 	if err != nil {
 		panic(err)
 	}
-
-	grpcGatewayHost := os.Getenv("GRPC_GW_HOST")
-	grpcGatewayPort := os.Getenv("GRPC_GW_PORT")
 
 	grpcGatewayURI := fmt.Sprintf("%s:%s", grpcGatewayHost, grpcGatewayPort)
 
