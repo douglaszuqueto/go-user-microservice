@@ -2,11 +2,14 @@ package server
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log"
 	"net"
 	"os"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
@@ -49,11 +52,38 @@ func unaryInterceptor(ctx context.Context,
 	return h, err
 }
 
+var errInvalidToken = errors.New("Invalid token")
+
 func jwtUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	meta, _ := metadata.FromIncomingContext(ctx)
 
-	// tokenHeader := meta.Get("authorization")
-	_ = meta.Get("authorization")
+	tokenHeader := meta.Get("authorization")
+	if len(tokenHeader) == 0 {
+		return nil, errInvalidToken
+	}
+
+	jwtToken := tokenHeader[0]
+	if len(jwtToken) == 0 {
+		return nil, errInvalidToken
+	}
+
+	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(os.Getenv("APP_JWT_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		return nil, err
+	}
+
+	_, ok := token.Claims.(jwt.MapClaims)
+
+	if !ok {
+		return nil, err
+	}
 
 	h, err := handler(ctx, req)
 
