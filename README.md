@@ -67,9 +67,13 @@ openssl genrsa -out server.key
 openssl req -new -sha256 -key server.key -out server.csr
 openssl x509 -req -days 3650 -in server.csr -out server.crt -signkey server.key
 ```
-## Todo
 
-* Colocar password
+## Geração do JWT Secret
+```bash
+openssl rand -base64 64
+```
+
+## Todo
 
 ## Changelog
 
