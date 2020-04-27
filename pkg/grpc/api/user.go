@@ -69,6 +69,10 @@ func (s *UserService) List(ctx context.Context, req *proto.ListUserRequest) (*pr
 
 // Create Create
 func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) (*proto.CreateUserResponse, error) {
+	if err := storeValidateOrFail(req.User); err != nil {
+		return nil, err
+	}
+
 	user := storage.User{
 		Username:  req.User.Username,
 		State:     req.User.State,
