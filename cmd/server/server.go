@@ -12,6 +12,7 @@ import (
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 
 	_ "github.com/lib/pq"
 )
@@ -55,8 +56,11 @@ func main() {
 
 			log.Println("Inserindo user:", idString)
 
+			password, _ := util.GeneratePassword("password_" + idString)
+
 			user := storage.User{
 				Username:  "username_" + idString,
+				Password:  password,
 				State:     1,
 				CreatedAt: time.Now(),
 				UpdatedAt: time.Now().Add(time.Hour),

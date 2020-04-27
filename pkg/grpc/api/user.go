@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 	"github.com/douglaszuqueto/go-grpc-user/proto"
 	"github.com/golang/protobuf/ptypes"
 
@@ -73,8 +74,14 @@ func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) 
 		return nil, err
 	}
 
+	password, err := util.GeneratePassword(req.User.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	user := storage.User{
 		Username:  req.User.Username,
+		Password:  password,
 		State:     req.User.State,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -100,9 +107,19 @@ func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) 
 		return nil, err
 	}
 
+	if err := storeValidateOrFail(req.User); err != nil {
+		return nil, err
+	}
+
+	password, err := util.GeneratePassword(req.User.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	user := storage.User{
 		ID:        req.User.Id,
 		Username:  req.User.Username,
+		Password:  password,
 		State:     req.User.State,
 		CreatedAt: userOld.CreatedAt,
 		UpdatedAt: time.Now(),
@@ -140,6 +157,7 @@ func userToProtoStruct(u storage.User) (proto.User, error) {
 	user := proto.User{
 		Id:       u.ID,
 		Username: u.Username,
+		Password: u.Password,
 		State:    u.State,
 	}
 

@@ -25,6 +25,7 @@ CREATE TABLE public."user"
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     username character varying COLLATE pg_catalog."default" NOT NULL,
+    password character varying COLLATE pg_catalog."default" NOT NULL,
     state smallint NOT NULL DEFAULT 1,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone NOT NULL DEFAULT now(),

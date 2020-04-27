@@ -18,6 +18,7 @@ type UserStorage interface {
 type User struct {
 	ID        string
 	Username  string
+	Password  string
 	State     uint32
 	CreatedAt time.Time
 	UpdatedAt time.Time

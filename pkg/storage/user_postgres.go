@@ -101,12 +101,12 @@ func (s *UserPostgresStorage) GetUser(id string) (User, error) {
 func (s *UserPostgresStorage) CreateUser(u User) (string, error) {
 	query := `
 		INSERT INTO public.user 
-			(username, state) 
+			(username, password, state) 
 		VALUES 
-			($1, $2)
+			($1, $2, $3)
 		RETURNING id`
 
-	id, err := doInsert(s.db, query, u.Username, u.State)
+	id, err := doInsert(s.db, query, u.Username, u.Password, u.State)
 	return id, err
 }
 
@@ -117,11 +117,12 @@ func (s *UserPostgresStorage) UpdateUser(u User) error {
 			public.user
 		SET
 			username = $1,
-			state = $2
+			password = $2,
+			state = $3
 		WHERE
-			id = $3`
+			id = $4`
 
-	return doUpdate(s.db, query, u.Username, u.State, u.ID)
+	return doUpdate(s.db, query, u.Username, u.Password, u.State, u.ID)
 }
 
 // DeleteUser DeleteUser

@@ -30,6 +30,10 @@ func (s *UserMemoryStorage) ListUser() ([]User, error) {
 		if !ok {
 			return false
 		}
+
+		// hide the password
+		u.Password = ""
+
 		l = append(l, u)
 		return true
 	})
@@ -47,6 +51,9 @@ func (s *UserMemoryStorage) GetUser(id string) (User, error) {
 	}
 
 	l = value.(User)
+
+	// hide the password
+	l.Password = ""
 
 	return l, nil
 }
