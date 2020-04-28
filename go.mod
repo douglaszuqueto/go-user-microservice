@@ -9,10 +9,10 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.14.4
 	github.com/lib/pq v1.4.0
 	github.com/pkg/errors v0.9.1
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
-	golang.org/x/net v0.0.0-20200421231249-e086a090c8fd
-	golang.org/x/sys v0.0.0-20200420163511-1957bb5e6d1f // indirect
+	golang.org/x/crypto v0.0.0-20200427165652-729f1e841bcc
+	golang.org/x/net v0.0.0-20200425230154-ff2c4b7c35a0
+	golang.org/x/sys v0.0.0-20200427175716-29b57079015a // indirect
 	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/genproto v0.0.0-20200420144010-e5e8543f8aeb
-	google.golang.org/grpc v1.29.0
+	google.golang.org/genproto v0.0.0-20200428115010-c45acf45369a
+	google.golang.org/grpc v1.29.1
 )
