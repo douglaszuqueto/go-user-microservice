@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 	"github.com/douglaszuqueto/go-grpc-user/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -35,17 +36,18 @@ func main() {
 	fmt.Printf("==> LIST <==\n\n")
 	listUser()
 
-	fmt.Printf("\n==> GET <==\n\n")
-	getUser("d588d052-813c-433c-aa1b-46b44213b455")
-
 	user := &proto.User{
-		Username: "username_" + util.GenerateID(),
+		Username: "username" + strconv.Itoa(rand.Intn(1000)),
+		Password: "adminadmin",
 		State:    1,
 	}
 
 	fmt.Printf("\n==> CREATE <==\n\n")
 
 	id, _ := createUser(user)
+
+	fmt.Printf("\n==> GET <==\n\n")
+	getUser(id)
 
 	fmt.Printf("\n==> UPDATE <==\n\n")
 
