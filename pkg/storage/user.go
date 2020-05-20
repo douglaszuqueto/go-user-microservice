@@ -16,12 +16,12 @@ type UserStorage interface {
 
 // User User
 type User struct {
-	ID        string
-	Username  string
-	Password  string
-	State     uint32
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        string    `db:"id"`
+	Username  string    `db:"username" gdb_i:"-" gdb_u:"-"`
+	Password  string    `db:"password" gdb_i:"-" gdb_u:"-"`
+	State     uint32    `db:"state" gdb_i:"-" gdb_u:"-"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 // GetStorageType GetStorageType

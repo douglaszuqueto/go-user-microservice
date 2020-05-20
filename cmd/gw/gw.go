@@ -6,16 +6,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util/graceful"
 	"github.com/douglaszuqueto/go-grpc-user/proto"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/keepalive"
 )
 
 var (
@@ -27,40 +24,22 @@ var (
 )
 
 func main() {
-	signalCh := make(chan os.Signal, 1)
-	doneCh := make(chan bool, 1)
-
-	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
-
-	go func() {
-		sig := <-signalCh
-		log.Println("Signal stop:", sig)
-
-		doneCh <- true
-	}()
+	grace := graceful.New()
 
 	creds, err := credentials.NewClientTLSFromFile("./certs/server.crt", "")
 	if err != nil {
 		log.Fatalln("could not load tls cert:", err)
 	}
 
-	k := keepalive.ClientParameters{
-		Time:                5 * time.Second, // send pings every 10 seconds if there is no activity
-		Timeout:             time.Second,     // wait 1 second for ping ack before considering the connection dead
-		PermitWithoutStream: true,            // send pings even without active streams
-	}
+	mux := runtime.NewServeMux()
+
+	ctx, cancelFunc := context.WithCancel(context.Background())
+
+	grpcURI := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(creds),
-		grpc.WithKeepaliveParams(k),
 	}
-
-	mux := runtime.NewServeMux()
-
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-
-	grpcURI := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
 	err = proto.RegisterUserServiceHandlerFromEndpoint(ctx, mux, grpcURI, opts)
 	if err != nil {
@@ -75,7 +54,8 @@ func main() {
 		}
 	}()
 
-	<-doneCh
-	cancel()
+	grace.Wait()
+	cancelFunc()
+
 	log.Println("Finalizando...")
 }

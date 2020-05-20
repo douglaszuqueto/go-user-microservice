@@ -75,6 +75,25 @@ openssl rand -base64 64
 
 ## Todo
 
+* status codes nos erros
+* Validação de contexto - timeout, interrupt...
+* Testes - client, server
+* JWT Manager
+* Interceptors
+  * Server
+    * unary
+    * stream
+  * Client
+    * unary
+    * stream
+
+* Camada client
+
 ## Changelog
 
 ## Referências
+
+https://dev.to/plutov/docker-and-go-modules-3kkn
+
+grpcurl -v -d '{}' \
+  -plaintext localhost:3000 api.UserService.Get

@@ -13,7 +13,7 @@ var (
 )
 
 var (
-	errUserInvalidUsername = errors.New("Username - apenas caracteres [a-zA-Z0-9] são aceitos")
+	errUserInvalidUsername = errors.New("Username - apenas caracteres [a-z0-9] são aceitos")
 	errUserPasswordLength  = errors.New("Senha - no mínimo seis caracteres")
 )
 

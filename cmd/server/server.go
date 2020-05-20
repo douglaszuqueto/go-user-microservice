@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/signal"
 	"strconv"
-	"syscall"
 	"time"
 
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
+	"github.com/douglaszuqueto/go-grpc-user/pkg/util/graceful"
 
 	_ "github.com/lib/pq"
 )
@@ -22,20 +21,16 @@ var (
 	grpcServerPort = os.Getenv("GRPC_SERVER_PORT")
 )
 
+var db storage.UserStorage
+
 func main() {
-	signalCh := make(chan os.Signal, 1)
-	doneCh := make(chan bool, 1)
+	grace := graceful.New()
 
-	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
+	db = storage.GetStorageType()
 
-	go func() {
-		sig := <-signalCh
-		log.Println("Signal stop:", sig)
-
-		doneCh <- true
-	}()
-
-	var db storage.UserStorage = storage.GetStorageType()
+	if storageType := os.Getenv("APP_STORAGE"); storageType == "memory" {
+		insertData()
+	}
 
 	uri := fmt.Sprintf("%s:%s", grpcServerHost, grpcServerPort)
 
@@ -50,30 +45,31 @@ func main() {
 		}
 	}()
 
-	if storageType := os.Getenv("APP_STORAGE"); storageType == "memory" {
-		for i := 1; i <= 10; i++ {
-			idString := strconv.Itoa(i)
+	grace.Wait()
+	rpcServer.Stop()
 
-			log.Println("Inserindo user:", idString)
+	log.Println("Finalizando...")
+}
 
-			password, _ := util.GeneratePassword("password_" + idString)
+func insertData() {
+	for i := 1; i <= 10; i++ {
+		idString := strconv.Itoa(i)
 
-			user := storage.User{
-				Username:  "username_" + idString,
-				Password:  password,
-				State:     1,
-				CreatedAt: time.Now(),
-				UpdatedAt: time.Now().Add(time.Hour),
-			}
+		log.Println("Inserindo user:", idString)
 
-			_, err := db.CreateUser(user)
-			if err != nil {
-				log.Println("CreateUser err", err)
-			}
+		password, _ := util.GeneratePassword("password_" + idString)
+
+		user := storage.User{
+			Username:  "username_" + idString,
+			Password:  password,
+			State:     1,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now().Add(time.Hour),
+		}
+
+		_, err := db.CreateUser(user)
+		if err != nil {
+			log.Println("CreateUser err", err)
 		}
 	}
-
-	<-doneCh
-	rpcServer.Stop()
-	log.Println("Finalizando...")
 }

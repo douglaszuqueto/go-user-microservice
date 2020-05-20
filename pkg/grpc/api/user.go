@@ -7,9 +7,12 @@ import (
 	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
 	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
 	"github.com/douglaszuqueto/go-grpc-user/proto"
-	"github.com/golang/protobuf/ptypes"
+	"github.com/google/uuid"
 
+	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // UserService UserService
@@ -32,6 +35,10 @@ func NewUserService(s *grpc.Server, storage storage.UserStorage) *UserService {
 
 // Get Get
 func (s *UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*proto.GetUserResponse, error) {
+	if _, err := uuid.Parse(req.Id); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
 	user, err := s.storage.GetUser(req.Id)
 	if err != nil {
 		return nil, err
@@ -52,7 +59,7 @@ func (s *UserService) List(ctx context.Context, req *proto.ListUserRequest) (*pr
 
 	users, err := s.storage.ListUser()
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
 
 	for _, u := range users {

@@ -6,13 +6,13 @@ GRPC_GW_PATH := $(shell go list -f '{{ .Dir }}' github.com/grpc-ecosystem/grpc-g
 APIS_PATH := "$(GRPC_GW_PATH)/../third_party/googleapis"
 
 dev-server:
-	GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info go run cmd/server/server.go
+	GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info go run -race cmd/server/server.go
 
 dev-client:
-	go run cmd/client/client.go
+	go run -race cmd/client/client.go
 
 dev-gw:
-	go run cmd/gw/gw.go
+	go run -race cmd/gw/gw.go
 
 prod:
 	CGO_ENABLED=0 go build -ldflags="-s -w" -o ./bin/grpc-server cmd/server/server.go
@@ -23,8 +23,11 @@ prod:
 	upx bin/grpc-client
 	upx bin/grpc-gw
 
+test:
+	go test -race -cover ./...
+	
 update:
-	go get all
+	go get ./...
 	go mod tidy
 
 pb:
@@ -37,3 +40,5 @@ docker-build:
 
 docker-compose:
 	docker-compose up
+
+.PHONY: dev-server dev-client dev-gw prod test update pb docker-build docker-compose

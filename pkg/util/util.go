@@ -22,7 +22,7 @@ func GeneratePassword(password string) (string, error) {
 		return "", passwordRequired
 	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		return "", passwordRequired
 	}
