@@ -25,8 +25,12 @@ CREATE TABLE public."user"
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     username character varying COLLATE pg_catalog."default" NOT NULL,
+    email character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     state smallint NOT NULL DEFAULT 1,
+    is_verified boolean NOT NULL DEFAULT true,
+    "two_factor_enabled" boolean NOT NULL DEFAULT false,
+    "two_factor_method" character varying COLLATE pg_catalog."default",
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone NOT NULL DEFAULT now(),
     CONSTRAINT user_pkey PRIMARY KEY (id)
