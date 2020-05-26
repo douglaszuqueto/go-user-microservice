@@ -11,14 +11,20 @@ dev-server:
 dev-gw:
 	go run -race cmd/gw/gw.go
 
+dev-cli:
+	go run -race cmd/cli/cli.go user create
+
 prod:
 	CGO_ENABLED=0
 
 	go build -ldflags="-s -w" -o ./bin/grpc-server cmd/server/server.go
 	go build -ldflags="-s -w" -o ./bin/grpc-gw cmd/gw/gw.go
 
+	go build -ldflags="-s -w" -o ./bin/cli cmd/cli/cli.go
+
 	upx bin/grpc-server
 	upx bin/grpc-gw
+	upx bin/cli
 
 test:
 	go test -race -cover ./...
@@ -38,4 +44,4 @@ docker-build:
 docker-compose:
 	docker-compose up
 
-.PHONY: dev-server dev-gw prod test update pb docker-build docker-compose
+.PHONY: dev-server dev-gw dev-cli prod test update pb docker-build docker-compose
