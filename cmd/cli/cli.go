@@ -27,70 +27,10 @@ func main() {
 	app := &cli.App{
 		Commands: []*cli.Command{
 			{
-				Name:    "user",
-				Aliases: []string{"u"},
-				Usage:   "options for user",
-				Subcommands: []*cli.Command{
-					{
-						Name:  "list",
-						Usage: "list a users",
-						Action: func(c *cli.Context) error {
-							listUser()
-							return nil
-						},
-					},
-					{
-						Name:  "get",
-						Usage: "get a user",
-						Flags: []cli.Flag{
-							&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
-						},
-						Action: func(c *cli.Context) error {
-							getUser(c.String("id"))
-							return nil
-						},
-					},
-					{
-						Name:  "create",
-						Usage: "get a user",
-						Action: func(c *cli.Context) error {
-							fmt.Println("create a user")
-
-							reader := bufio.NewReader(os.Stdin)
-							fmt.Print("Username: ")
-							text, _ := reader.ReadString('\n')
-							fmt.Println(text)
-
-							fmt.Print("Password: ")
-							text, _ = reader.ReadString('\n')
-							fmt.Println(text)
-
-							return nil
-						},
-					},
-					{
-						Name:  "update",
-						Usage: "update a user",
-						Flags: []cli.Flag{
-							&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
-						},
-						Action: func(c *cli.Context) error {
-							fmt.Println("update a user: ", c.String("id"))
-							return nil
-						},
-					},
-					{
-						Name:  "remove",
-						Usage: "remove an existing",
-						Flags: []cli.Flag{
-							&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
-						},
-						Action: func(c *cli.Context) error {
-							fmt.Println("removed user: ", c.String("id"))
-							return nil
-						},
-					},
-				},
+				Name:        "user",
+				Aliases:     []string{"u"},
+				Usage:       "options for user",
+				Subcommands: userCommands(),
 			},
 		},
 	}
@@ -99,6 +39,72 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func userCommands() []*cli.Command {
+	commands := []*cli.Command{
+		{
+			Name:  "list",
+			Usage: "list a users",
+			Action: func(c *cli.Context) error {
+				listUser()
+				return nil
+			},
+		},
+		{
+			Name:  "get",
+			Usage: "get a user",
+			Flags: []cli.Flag{
+				&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
+			},
+			Action: func(c *cli.Context) error {
+				getUser(c.String("id"))
+				return nil
+			},
+		},
+		{
+			Name:  "create",
+			Usage: "get a user",
+			Action: func(c *cli.Context) error {
+				fmt.Println("create a user")
+
+				reader := bufio.NewReader(os.Stdin)
+				fmt.Print("Username: ")
+				text, _ := reader.ReadString('\n')
+				fmt.Println(text)
+
+				fmt.Print("Password: ")
+				text, _ = reader.ReadString('\n')
+				fmt.Println(text)
+
+				return nil
+			},
+		},
+		{
+			Name:  "update",
+			Usage: "update a user",
+			Flags: []cli.Flag{
+				&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
+			},
+			Action: func(c *cli.Context) error {
+				fmt.Println("update a user: ", c.String("id"))
+				return nil
+			},
+		},
+		{
+			Name:  "remove",
+			Usage: "remove an existing",
+			Flags: []cli.Flag{
+				&cli.StringFlag{Name: "id", Aliases: []string{"i"}},
+			},
+			Action: func(c *cli.Context) error {
+				fmt.Println("removed user: ", c.String("id"))
+				return nil
+			},
+		},
+	}
+
+	return commands
 }
 
 func connect() *grpc.ClientConn {

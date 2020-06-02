@@ -15,6 +15,10 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
+var (
+	errInvalidToken = errors.New("Invalid token")
+)
+
 // GRPCServer GRPCServer
 type GRPCServer struct {
 	listener net.Listener
@@ -37,8 +41,6 @@ func unaryInterceptor(ctx context.Context,
 
 	return h, err
 }
-
-var errInvalidToken = errors.New("Invalid token")
 
 func jwtUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	meta, _ := metadata.FromIncomingContext(ctx)
@@ -95,6 +97,19 @@ func grpcMiddlewares() []grpc.UnaryServerInterceptor {
 	return unary
 }
 
+func withCreds() grpc.ServerOption {
+	creds, err := credentials.NewServerTLSFromFile("./certs/server.crt", "./certs/server.key")
+	if err != nil {
+		log.Fatalf("failed to create credentials: %v", err)
+	}
+
+	if true {
+		return grpc.Creds(creds)
+	}
+
+	return grpc.EmptyServerOption{}
+}
+
 // NewServer NewServer
 func NewServer(port string) *GRPCServer {
 	listener, err := net.Listen("tcp", port)
@@ -102,17 +117,16 @@ func NewServer(port string) *GRPCServer {
 		log.Fatalln(err)
 	}
 
-	creds, err := credentials.NewServerTLSFromFile("./certs/server.crt", "./certs/server.key")
-	if err != nil {
-		log.Fatalf("failed to create credentials: %v", err)
-	}
+	middlewares := grpcMiddlewares()
+
+	server := grpc.NewServer(
+		withCreds(),
+		grpc.ChainUnaryInterceptor(middlewares...),
+	)
 
 	return &GRPCServer{
 		listener: listener,
-		Grpc: grpc.NewServer(
-			grpc.Creds(creds),
-			grpc.ChainUnaryInterceptor(grpcMiddlewares()...),
-		),
+		Grpc:     server,
 	}
 }
 

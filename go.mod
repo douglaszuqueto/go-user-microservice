@@ -13,6 +13,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
+	github.com/urfave/cli/v2 v2.2.0
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
