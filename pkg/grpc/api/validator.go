@@ -4,7 +4,7 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/douglaszuqueto/go-grpc-user/proto"
+	"github.com/douglaszuqueto/go-user-microservice/proto"
 )
 
 var (

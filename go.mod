@@ -1,4 +1,4 @@
-module github.com/douglaszuqueto/go-grpc-user
+module github.com/douglaszuqueto/go-user-microservice
 
 go 1.14
 

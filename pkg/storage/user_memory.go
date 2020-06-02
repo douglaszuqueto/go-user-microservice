@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util"
 )
 
 // UserMemoryStorage UserMemoryStorage

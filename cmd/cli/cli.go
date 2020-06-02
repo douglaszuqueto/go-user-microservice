@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/douglaszuqueto/go-grpc-user/proto"
+	"github.com/douglaszuqueto/go-user-microservice/proto"
 	"github.com/urfave/cli/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

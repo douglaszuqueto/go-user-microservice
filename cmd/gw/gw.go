@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util/graceful"
-	"github.com/douglaszuqueto/go-grpc-user/proto"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util/graceful"
+	"github.com/douglaszuqueto/go-user-microservice/proto"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"

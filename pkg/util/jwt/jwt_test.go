@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util/jwt"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util/jwt"
 
 	"github.com/stretchr/testify/require"
 )

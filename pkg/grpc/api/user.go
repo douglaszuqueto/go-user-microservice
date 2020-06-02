@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
-	"github.com/douglaszuqueto/go-grpc-user/proto"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/storage"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util"
+	"github.com/douglaszuqueto/go-user-microservice/proto"
 	"github.com/google/uuid"
 
 	"github.com/golang/protobuf/ptypes"

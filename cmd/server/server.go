@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/api"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/grpc/server"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/storage"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util"
-	"github.com/douglaszuqueto/go-grpc-user/pkg/util/graceful"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/grpc/api"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/grpc/server"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/storage"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util"
+	"github.com/douglaszuqueto/go-user-microservice/pkg/util/graceful"
 
 	_ "github.com/lib/pq"
 )
