@@ -12,13 +12,13 @@ COPY . .
 RUN CGO_ENABLED=0 go build -ldflags "${XFLAGS} -s -w" -a -o service ./cmd/$service/$service.go
 
 # UPX
-FROM upx as upx
+FROM douglaszuqueto/alpine-upx as upx
 WORKDIR /app
 COPY --from=builder /app/service /app
 RUN upx /app/service
 
 # FINAL
-FROM go
+FROM douglaszuqueto/alpine-go
 COPY certs /app/certs
 WORKDIR /app
 COPY --from=upx /app/service /app
