@@ -3,8 +3,8 @@
 ## Serviços
 
 * Server
-* Client
 * Gateway
+* CLI
 
 ## Requisitos
 
@@ -94,6 +94,3 @@ openssl rand -base64 64
 ## Referências
 
 https://dev.to/plutov/docker-and-go-modules-3kkn
-
-grpcurl -v -d '{}' \
-  -plaintext localhost:3000 api.UserService.Get
