@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-server
+  labels:
+    app: user-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-server
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-server
+    spec:
+      containers:
+        - name: server
+          image: douglaszuqueto/go-user-microservice-server
+          resources: {}
+          envFrom:
+          - configMapRef:
+              name: api-server-config

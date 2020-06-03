@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-gw
+  labels:
+    app: user-gw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-gw
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: user-gw
+    spec:
+      containers:
+        - name: gw
+          image: douglaszuqueto/go-user-microservice-gw
+          resources: {}
+          envFrom:
+          - configMapRef:
+              name: api-gw-config

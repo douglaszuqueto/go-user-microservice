@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-server-svc
+  labels:
+    app: user-server
+spec:
+  ports:
+  - name: "grpc"
+    nodePort: 30389
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app: user-server
+  type: NodePort
