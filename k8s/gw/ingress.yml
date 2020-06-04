@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: user-gw-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: user.douglaszuqueto.com
+    http:
+      paths:
+      - backend:
+          serviceName: user-gw-svc
+          servicePort: 5000
