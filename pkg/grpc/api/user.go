@@ -39,7 +39,7 @@ func (s *UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*prot
 		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	user, err := s.storage.GetUser(req.Id)
+	user, err := s.storage.GetUser(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (s *UserService) Get(ctx context.Context, req *proto.GetUserRequest) (*prot
 func (s *UserService) List(ctx context.Context, req *proto.ListUserRequest) (*proto.ListUserResponse, error) {
 	l := []*proto.User{}
 
-	users, err := s.storage.ListUser()
+	users, err := s.storage.ListUser(ctx)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
@@ -94,7 +94,7 @@ func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) 
 		UpdatedAt: time.Now(),
 	}
 
-	id, err := s.storage.CreateUser(user)
+	id, err := s.storage.CreateUser(ctx, user)
 
 	if err != nil {
 		return nil, err
@@ -109,7 +109,7 @@ func (s *UserService) Create(ctx context.Context, req *proto.CreateUserRequest) 
 
 // Update Update
 func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) (*proto.UpdateUserResponse, error) {
-	userOld, err := s.storage.GetUser(req.User.Id)
+	userOld, err := s.storage.GetUser(ctx, req.User.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) 
 		UpdatedAt: time.Now(),
 	}
 
-	if err := s.storage.UpdateUser(user); err != nil {
+	if err := s.storage.UpdateUser(ctx, user); err != nil {
 		return nil, err
 	}
 
@@ -145,11 +145,11 @@ func (s *UserService) Update(ctx context.Context, req *proto.UpdateUserRequest) 
 
 // Delete Delete
 func (s *UserService) Delete(ctx context.Context, req *proto.DeleteUserRequest) (*proto.DeleteUserResponse, error) {
-	if _, err := s.storage.GetUser(req.Id); err != nil {
+	if _, err := s.storage.GetUser(ctx, req.Id); err != nil {
 		return nil, err
 	}
 
-	if err := s.storage.DeleteUser(req.Id); err != nil {
+	if err := s.storage.DeleteUser(ctx, req.Id); err != nil {
 		return nil, err
 	}
 

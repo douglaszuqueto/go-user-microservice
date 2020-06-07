@@ -1,17 +1,18 @@
 package storage
 
 import (
+	"context"
 	"os"
 	"time"
 )
 
 // UserStorage UserStorage
 type UserStorage interface {
-	ListUser() ([]User, error)
-	GetUser(id string) (User, error)
-	CreateUser(u User) (string, error)
-	UpdateUser(u User) error
-	DeleteUser(id string) error
+	ListUser(ctx context.Context) ([]User, error)
+	GetUser(ctx context.Context, id string) (User, error)
+	CreateUser(ctx context.Context, u User) (string, error)
+	UpdateUser(ctx context.Context, u User) error
+	DeleteUser(ctx context.Context, id string) error
 }
 
 // User User

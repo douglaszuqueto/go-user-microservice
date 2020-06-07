@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -67,7 +68,7 @@ func insertData() {
 			UpdatedAt: time.Now().Add(time.Hour),
 		}
 
-		_, err := db.CreateUser(user)
+		_, err := db.CreateUser(context.Background(), user)
 		if err != nil {
 			log.Println("CreateUser err", err)
 		}

@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"errors"
 	"log"
 	"sync"
@@ -23,7 +24,7 @@ func NewUserMemoryStorage() *UserMemoryStorage {
 }
 
 // ListUser ListUser
-func (s *UserMemoryStorage) ListUser() ([]User, error) {
+func (s *UserMemoryStorage) ListUser(ctx context.Context) ([]User, error) {
 	var l []User
 	s.db.Range(func(key interface{}, value interface{}) bool {
 		u, ok := value.(User)
@@ -42,7 +43,7 @@ func (s *UserMemoryStorage) ListUser() ([]User, error) {
 }
 
 // GetUser GetUser
-func (s *UserMemoryStorage) GetUser(id string) (User, error) {
+func (s *UserMemoryStorage) GetUser(ctx context.Context, id string) (User, error) {
 	var l User
 
 	value, ok := s.db.Load(id)
@@ -59,7 +60,7 @@ func (s *UserMemoryStorage) GetUser(id string) (User, error) {
 }
 
 // CreateUser CreateUser
-func (s *UserMemoryStorage) CreateUser(u User) (string, error) {
+func (s *UserMemoryStorage) CreateUser(ctx context.Context, u User) (string, error) {
 	u.ID = util.GenerateID()
 
 	s.db.Store(u.ID, u)
@@ -68,14 +69,14 @@ func (s *UserMemoryStorage) CreateUser(u User) (string, error) {
 }
 
 // UpdateUser UpdateUser
-func (s *UserMemoryStorage) UpdateUser(u User) error {
+func (s *UserMemoryStorage) UpdateUser(ctx context.Context, u User) error {
 	s.db.Store(u.ID, u)
 
 	return nil
 }
 
 // DeleteUser DeleteUser
-func (s *UserMemoryStorage) DeleteUser(id string) error {
+func (s *UserMemoryStorage) DeleteUser(ctx context.Context, id string) error {
 	s.db.Delete(id)
 
 	return nil

@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -24,7 +25,7 @@ func NewUserPostgresStorage() *UserPostgresStorage {
 }
 
 // ListUser ListUser
-func (s *UserPostgresStorage) ListUser() ([]User, error) {
+func (s *UserPostgresStorage) ListUser(ctx context.Context) ([]User, error) {
 	var l []User
 
 	query := `
@@ -66,7 +67,7 @@ func (s *UserPostgresStorage) ListUser() ([]User, error) {
 }
 
 // GetUser GetUser
-func (s *UserPostgresStorage) GetUser(id string) (User, error) {
+func (s *UserPostgresStorage) GetUser(ctx context.Context, id string) (User, error) {
 	var u User
 
 	query := `
@@ -98,7 +99,7 @@ func (s *UserPostgresStorage) GetUser(id string) (User, error) {
 }
 
 // CreateUser CreateUser
-func (s *UserPostgresStorage) CreateUser(u User) (string, error) {
+func (s *UserPostgresStorage) CreateUser(ctx context.Context, u User) (string, error) {
 	query := `
 		INSERT INTO public.user 
 			(username, password, state) 
@@ -111,7 +112,7 @@ func (s *UserPostgresStorage) CreateUser(u User) (string, error) {
 }
 
 // UpdateUser UpdateUser
-func (s *UserPostgresStorage) UpdateUser(u User) error {
+func (s *UserPostgresStorage) UpdateUser(ctx context.Context, u User) error {
 	query := `
 		UPDATE
 			public.user
@@ -126,7 +127,7 @@ func (s *UserPostgresStorage) UpdateUser(u User) error {
 }
 
 // DeleteUser DeleteUser
-func (s *UserPostgresStorage) DeleteUser(id string) error {
+func (s *UserPostgresStorage) DeleteUser(ctx context.Context, id string) error {
 	return doDelete(s.db, "user", id)
 }
 
