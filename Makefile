@@ -41,12 +41,6 @@ docker-build:
 	./docker.sh server
 	./docker.sh gw
 
-	docker image tag grpc-server:latest douglaszuqueto/go-user-microservice-server
-	docker image tag grpc-gw:latest douglaszuqueto/go-user-microservice-gw
-
-	docker push douglaszuqueto/go-user-microservice-server
-	docker push douglaszuqueto/go-user-microservice-gw
-
 docker-compose:
 	docker-compose up
 
