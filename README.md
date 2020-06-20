@@ -13,7 +13,47 @@
 * [gRPC-Go](https://github.com/grpc/grpc-go)
 * [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway)
 
+## Storage
+
+* Memória
+* PostgreSQL
+
+## Métodos
+
+* list
+* get
+* create
+* update
+* delete
+
+## Deploy
+-
+-
+
+### Standalone
+-
+-
+
+### Docker
+-
+
+### Docker compose
+-
+
+### Kubernetes
+-
+
 ## API
+
+* Endpoints
+
+| Version | HTTP | Path |
+|:--:|:--:|:--|
+| /v1 | GET | /user | 
+| /v1 | GET | /user/1 | 
+| /v1 | POST | /user |
+| /v1 | PUT | /user/1 | 
+| /v1 | DELETE | /user/1 |
 
 ### All
 ```bash
@@ -75,9 +115,8 @@ openssl rand -base64 64
 
 ## Todo
 
-* status codes nos erros
+* Status codes nos erros
 * Validação de contexto - timeout, interrupt...
-* Testes - client, server
 * JWT Manager
 * Interceptors
   * Server
@@ -86,8 +125,8 @@ openssl rand -base64 64
   * Client
     * unary
     * stream
-
-* Camada client
+* CLI
+* Testes - client, server
 
 ## Changelog
 
