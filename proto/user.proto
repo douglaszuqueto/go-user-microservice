@@ -46,11 +46,19 @@ message User {
 		google.protobuf.Timestamp updated_at = 6;
 }
 
+// 
+// List
+// 
+
 message ListUserRequest {}
 
 message ListUserResponse {
 		repeated User user = 1;
 }
+
+// 
+// Get
+// 
 
 message GetUserRequest {
 		string id = 1;
@@ -60,6 +68,10 @@ message GetUserResponse {
 		User user = 1;
 }
 
+// 
+// Create
+// 
+
 message CreateUserRequest {
 		User user = 1;
 }
@@ -68,6 +80,10 @@ message CreateUserResponse {
 		string id = 1;
 }
 
+// 
+// Update
+// 
+
 message UpdateUserRequest {
 		User user = 1;
 }
@@ -75,6 +91,10 @@ message UpdateUserRequest {
 message UpdateUserResponse {
 		string result = 1;
 }
+
+// 
+// Delete
+// 
 
 message DeleteUserRequest {
 		string id = 1;
